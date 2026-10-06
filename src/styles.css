@@ -32,3 +32,141 @@ button{cursor:pointer}
 .settings-theme>span{font-weight:700;font-size:13px}
 .settings-theme>div{display:flex;gap:8px}
 .settings-theme .secondary-btn{width:auto!important;padding:9px 12px!important}
+/* ================================
+   AUREX VEHICLE RESEARCH
+================================ */
+
+.vehicle-research {
+  margin-top: 28px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border);
+}
+
+.vehicle-research > .eyebrow {
+  margin-bottom: 14px;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.research-answer {
+  padding: 20px 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-soft);
+  margin-bottom: 20px;
+}
+
+.research-answer h3,
+.research-sources h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.research-answer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.75;
+}
+
+/* Research sources */
+
+.research-sources {
+  margin-top: 18px;
+}
+
+.research-source {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 15px 16px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.research-source:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: var(--surface-soft);
+}
+
+.research-source span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.research-source strong {
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.research-source small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 0.73rem;
+}
+
+.research-source svg {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  color: var(--accent);
+}
+
+/* Research error */
+
+.modal-note {
+  margin-top: 18px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Research button */
+
+.vehicle-research + .primary-btn,
+.vehicle-research ~ .primary-btn {
+  margin-top: 20px;
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .vehicle-research {
+    margin-top: 22px;
+    padding-top: 22px;
+  }
+
+  .research-answer {
+    padding: 17px;
+  }
+
+  .research-source {
+    padding: 13px;
+  }
+
+  .research-source small {
+    max-width: 190px;
+  }
+}
