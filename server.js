@@ -1,10 +1,14 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
@@ -138,6 +142,11 @@ app.post("/api/vehicle-search", async (req, res) => {
       error: "Unable to research this vehicle right now."
     });
   }
+  app.use(express.static(path.join(__dirname, "dist")));
+
+app.get("/*splat", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 });
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`AUREX MOTORS API server running on http://localhost:${PORT}`);
