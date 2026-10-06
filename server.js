@@ -144,7 +144,7 @@ app.post("/api/vehicle-search", async (req, res) => {
   }
   app.use(express.static(path.join(__dirname, "dist")));
 
-app.get("/*splat", (req, res) => {
+app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 });
