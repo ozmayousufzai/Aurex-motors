@@ -113,7 +113,7 @@ Make sure you have:
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/aurex-motors.git
+git clone https://github.com/ozmayousufzai/Aurex-motors.git
 ```
 
 Navigate to the project:
