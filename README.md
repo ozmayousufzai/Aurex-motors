@@ -183,6 +183,10 @@ The current project focuses primarily on the frontend experience. Future version
 The frontend experience is functional and continues to be refined with additional marketplace features, visual improvements, and production-oriented functionality.
 
 ---
+## Preview
+
+![AUREX MOTORS Homepage](./screenshots/aurex-homepage.png)
+
 
 ## Live Demo
 
