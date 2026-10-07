@@ -85,6 +85,7 @@ app.get("/api/test-tavily", async (req, res) => {
     });
   }
 });
+
 // Research a specific vehicle through Tavily
 app.post("/api/vehicle-search", async (req, res) => {
   try {
@@ -142,12 +143,15 @@ app.post("/api/vehicle-search", async (req, res) => {
       error: "Unable to research this vehicle right now."
     });
   }
-  app.use(express.static(path.join(__dirname, "dist")));
+});
+
+// Serve the built React frontend
+app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
-});
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`AUREX MOTORS API server running on http://localhost:${PORT}`);
 });
