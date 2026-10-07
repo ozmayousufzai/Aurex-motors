@@ -39,21 +39,25 @@ function App() {
     setToast(msg);
     setTimeout(()=>setToast(""),2800);
   };
+
   const go = id => {
     document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
     setMenu(false);
   };
+
   const toggleTheme = () => {
     const next=!dark;
     setDark(next);
     localStorage.setItem("aurex-theme",next?"dark":"light");
   };
+
   const toggleFavorite = id => {
     const next=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];
     setFavorites(next);
     localStorage.setItem("aurex-favorites",JSON.stringify(next));
     notify(next.includes(id)?"Saved to favorites":"Removed from favorites");
   };
+
   const toggleCompare = id => {
     if(compare.includes(id)) setCompare(compare.filter(x=>x!==id));
     else if(compare.length<3) setCompare([...compare,id]);
@@ -69,6 +73,7 @@ function App() {
         && (brand==="All"||c.make===brand)
         && c.price<=maxPrice;
     });
+
     if(sort==="price-low") list.sort((a,b)=>a.price-b.price);
     if(sort==="price-high") list.sort((a,b)=>b.price-a.price);
     if(sort==="mileage") list.sort((a,b)=>a.mileage-b.mileage);
@@ -77,44 +82,43 @@ function App() {
   },[query,body,fuel,brand,maxPrice,sort]);
 
   const openTestDrive = car => {
-  setSelected(car);
-  setModal("test");
-};
+    setSelected(car);
+    setModal("test");
+  };
 
-const researchVehicle = async car => {
-  setResearchLoading(true);
-  setResearch(null);
-  setResearchError("");
+  const researchVehicle = async car => {
+    setResearchLoading(true);
+    setResearch(null);
+    setResearchError("");
 
-  try {
-    const query = `${car.year} ${car.make} ${car.model} specifications performance features review`;
+    try {
+      const query = `${car.year} ${car.make} ${car.model} specifications performance features review`;
 
-    const response = await fetch("http://localhost:3001/api/vehicle-search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ query })
-    });
+      const response = await fetch("/api/vehicle-search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ query })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || "Research request failed.");
+      if (!response.ok) {
+        throw new Error(data.error || "Research request failed.");
+      }
+
+      setResearch(data);
+    } catch (error) {
+      console.error("Vehicle research error:", error);
+      setResearchError(error.message || "Unable to research this vehicle.");
+    } finally {
+      setResearchLoading(false);
     }
+  };
 
-    setResearch(data);
-  } catch (error) {
-    console.error("Vehicle research error:", error);
-    setResearchError(error.message || "Unable to research this vehicle.");
-  } finally {
-    setResearchLoading(false);
-  }
-};
-
-const submit = (e,message) => {
+  const submit = (e,message) => {
     e.preventDefault(); setModal(null); notify(message);
-    
   };
 
   return (
@@ -151,12 +155,12 @@ const submit = (e,message) => {
             <div className="hero-stats"><span><b>24+</b> curated vehicles</span><span><b>4</b> vehicle categories</span><span><b>100%</b> digital experience</span></div>
           </div>
           <div className="hero-visual">
-           <div
-  className="hero-image"
-  style={{
-    backgroundImage: "url('https://www.dubicars.com/images/e297bf/w_1300x760/laith-el-obeidi/f7c808d3-2665-4fe1-ae80-4b83d17a986f.jpg')"
-  }}
-></div>
+            <div
+              className="hero-image"
+              style={{
+                backgroundImage: "url('https://www.dubicars.com/images/e297bf/w_1300x760/laith-el-obeidi/f7c808d3-2665-4fe1-ae80-4b83d17a986f.jpg')"
+              }}
+            ></div>
             <div className="floating-card"><span>FEATURED</span><b>Mercedes-AMG G 63</b><strong>$189,000</strong><button onClick={()=>setSelected(cars[16])}>View vehicle <ChevronRight/></button></div>
           </div>
         </section>
@@ -189,13 +193,12 @@ const submit = (e,message) => {
                   </button>
                   <span className="badge">{car.badge}</span>
                   <div className="car-image-tools">
-                  <span className="image-hint">View vehicle</span>
-                  <div className="card-tools">
-                    <button className={favorites.includes(car.id)?"selected icon-btn":"icon-btn"} onClick={()=>toggleFavorite(car.id)} title="Favorite"><Heart fill={favorites.includes(car.id)?"currentColor":"none"}/></button>
-                    <button className={compare.includes(car.id)?"selected icon-btn":"icon-btn"} onClick={()=>toggleCompare(car.id)} title="Compare"><Scale/></button>
-                    
+                    <span className="image-hint">View vehicle</span>
+                    <div className="card-tools">
+                      <button className={favorites.includes(car.id)?"selected icon-btn":"icon-btn"} onClick={()=>toggleFavorite(car.id)} title="Favorite"><Heart fill={favorites.includes(car.id)?"currentColor":"none"}/></button>
+                      <button className={compare.includes(car.id)?"selected icon-btn":"icon-btn"} onClick={()=>toggleCompare(car.id)} title="Compare"><Scale/></button>
+                    </div>
                   </div>
-                </div>
                 </div>
                 <div className="car-info">
                   <div className="car-title"><div><span>{car.year} · {car.body}</span><button className="car-name-btn" onClick={()=>setSelected(car)}>{car.make} {car.model}</button></div><strong>{money(car.price)}</strong></div>
@@ -231,102 +234,102 @@ const submit = (e,message) => {
 
       {compare.length>0&&<div className="compare-bar"><b>{compare.length} selected</b><div>{compare.map(id=>{const c=cars.find(x=>x.id===id);return <span key={id}>{c.make} {c.model}</span>})}</div><button onClick={()=>setModal("compare")}>Compare</button><button className="clear-btn" onClick={()=>setCompare([])}>Clear</button></div>}
 
-     {selected&&modal!=="test"&&
-  <Modal
-    title={`${selected.make} ${selected.model}`}
-    onClose={()=>{
-      setSelected(null);
-      setResearch(null);
-      setResearchError("");
-    }}
-  >
-    <img
-      className="modal-car-image"
-      src={selected.image}
-      alt=""
-    />
+      {selected&&modal!=="test"&&
+        <Modal
+          title={`${selected.make} ${selected.model}`}
+          onClose={()=>{
+            setSelected(null);
+            setResearch(null);
+            setResearchError("");
+          }}
+        >
+          <img
+            className="modal-car-image"
+            src={selected.image}
+            alt=""
+          />
 
-    <p className="eyebrow">
-      {selected.year} · {selected.badge}
-    </p>
+          <p className="eyebrow">
+            {selected.year} · {selected.badge}
+          </p>
 
-    <h2>{selected.make} {selected.model}</h2>
+          <h2>{selected.make} {selected.model}</h2>
 
-    <strong className="modal-price">
-      {money(selected.price)}
-    </strong>
+          <strong className="modal-price">
+            {money(selected.price)}
+          </strong>
 
-    <p>{selected.description}</p>
+          <p>{selected.description}</p>
 
-    <div className="modal-specs">
-      <span><b>Engine</b>{selected.engine}</span>
-      <span><b>Power</b>{selected.power}</span>
-      <span><b>Drive</b>{selected.drive}</span>
-      <span><b>Mileage</b>{selected.mileage.toLocaleString()} mi</span>
-    </div>
-
-    {researchError && (
-      <div className="modal-note">
-        {researchError}
-      </div>
-    )}
-
-    {research && (
-      <div className="vehicle-research">
-        <p className="eyebrow">AI-POWERED RESEARCH</p>
-
-        {research.answer && (
-          <div className="research-answer">
-            <h3>What we found</h3>
-            <p>{research.answer}</p>
+          <div className="modal-specs">
+            <span><b>Engine</b>{selected.engine}</span>
+            <span><b>Power</b>{selected.power}</span>
+            <span><b>Drive</b>{selected.drive}</span>
+            <span><b>Mileage</b>{selected.mileage.toLocaleString()} mi</span>
           </div>
-        )}
 
-        {research.results?.length > 0 && (
-          <div className="research-sources">
-            <h3>Sources</h3>
+          {researchError && (
+            <div className="modal-note">
+              {researchError}
+            </div>
+          )}
 
-            {research.results.slice(0, 5).map((result, index) => (
-              <a
-                key={result.url || index}
-                href={result.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="research-source"
-              >
-                <span>
-                  <strong>{result.title}</strong>
-                  <small>{result.url}</small>
-                </span>
-                <ChevronRight/>
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-    )}
+          {research && (
+            <div className="vehicle-research">
+              <p className="eyebrow">AI-POWERED RESEARCH</p>
 
-    <button
-      className="primary-btn full"
-      onClick={()=>setModal("test")}
-    >
-      Book a test drive <CalendarDays/>
-    </button>
+              {research.answer && (
+                <div className="research-answer">
+                  <h3>What we found</h3>
+                  <p>{research.answer}</p>
+                </div>
+              )}
 
-    <button
-      className="secondary-btn full"
-      onClick={()=>researchVehicle(selected)}
-      disabled={researchLoading}
-    >
-      {researchLoading
-        ? "Researching vehicle..."
-        : "Research this vehicle"}
+              {research.results?.length > 0 && (
+                <div className="research-sources">
+                  <h3>Sources</h3>
 
-      {!researchLoading && <Globe/>}
-    </button>
+                  {research.results.slice(0, 5).map((result, index) => (
+                    <a
+                      key={result.url || index}
+                      href={result.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="research-source"
+                    >
+                      <span>
+                        <strong>{result.title}</strong>
+                        <small>{result.url}</small>
+                      </span>
+                      <ChevronRight/>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
-  </Modal>
-}
+          <button
+            className="primary-btn full"
+            onClick={()=>setModal("test")}
+          >
+            Book a test drive <CalendarDays/>
+          </button>
+
+          <button
+            className="secondary-btn full"
+            onClick={()=>researchVehicle(selected)}
+            disabled={researchLoading}
+          >
+            {researchLoading
+              ? "Researching vehicle..."
+              : "Research this vehicle"}
+
+            {!researchLoading && <Globe/>}
+          </button>
+
+        </Modal>
+      }
 
       {modal==="test"&&<Modal title="Book a test drive" onClose={()=>{setModal(null);setSelected(null)}}><form onSubmit={e=>submit(e,"Test-drive request submitted successfully.")}><label>Vehicle<select defaultValue={selected?selected.id:""}>{selected&&<option value={selected.id}>{selected.make} {selected.model}</option>}{!selected&&cars.slice(0,8).map(c=><option key={c.id} value={c.id}>{c.make} {c.model}</option>)}</select></label><div className="form-grid"><label>Full name<input required placeholder="Your name"/></label><label>Email<input required type="email" placeholder="you@example.com"/></label></div><div className="form-grid"><label>Date<input required type="date"/></label><label>Preferred time<select><option>10:00 AM</option><option>1:00 PM</option><option>4:00 PM</option></select></label></div><button className="primary-btn full">Confirm test drive <CalendarDays/></button></form></Modal>}
 
@@ -373,4 +376,5 @@ const submit = (e,message) => {
 function Modal({title,onClose,children}) {
   return <div className="modal-backdrop" onClick={onClose}><div className="modal" onClick={e=>e.stopPropagation()}><button className="close icon-btn" onClick={onClose}><X/></button><p className="eyebrow">AUREX MOTORS</p><h2>{title}</h2>{children}</div></div>;
 }
+
 export default App;
