@@ -190,7 +190,7 @@ The frontend experience is functional and continues to be refined with additiona
 
 ## Live Demo
 
-**Coming soon**
+**https://aurex-motors.onrender.com/**
 
 ---
 
